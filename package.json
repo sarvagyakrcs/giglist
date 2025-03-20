@@ -1,5 +1,9 @@
 {
-  "name": "giglist-final",
+  "name": "giglist",
+  "author": {
+    "name": "Sarvagya Kumar",
+    "email": "thesarvagyakumar@gmail.com"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
