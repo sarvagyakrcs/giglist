@@ -17,8 +17,8 @@ export const NAVBAR_CONSTANTS : {
     },
     {
         id: 2,
-        label: "Pricing",
-        path: "/pricing",
+        label: "Changelog",
+        path: "/changelog",
         section: false,
         icon: CreditCard
     },

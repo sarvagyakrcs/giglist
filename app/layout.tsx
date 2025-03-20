@@ -24,11 +24,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${font.className} antialiased`}
+          className={`dark:bg-gray-900 ${font.className} antialiased`}
         >
           <GlobalProvider>
             {children}
-            <Footer />
           </GlobalProvider>
         </body>
       </html>
