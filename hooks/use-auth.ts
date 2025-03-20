@@ -1,3 +1,4 @@
+"use client"
 import { useSignIn } from '@clerk/nextjs'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -49,7 +50,7 @@ const UseAuth = () => {
                 reset();
                 await setActive({ session: authenticated.createdSessionId });
                 toast.success("Welcome back");
-                router.push("/callback/sign-in");
+                router.push("/");
             }
             
         } catch (error) {
@@ -66,6 +67,10 @@ const UseAuth = () => {
         mutationFn: (data: LogInSchemaType) => {
             return onSubmit(data);
         },
+        onError: (error) => {
+            console.error(error);
+            toast.error("Something went wrong");
+        }
     })
 
     const onAuthenticateUser = handleSubmit(async (data) => {
