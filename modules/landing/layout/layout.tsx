@@ -1,5 +1,6 @@
 import React from 'react'
-import LandingPageNavbar from '../components/navbar'
+import LandingPageNavbar from '../components/navbar/navbar'
+import Footer from '@/components/global/footer'
 
 type Props = {
     children: React.ReactNode
@@ -7,9 +8,10 @@ type Props = {
 
 const LandingPageLayout = ({ children }: Props) => {
   return (
-    <main className="flex flex-col items-center justify-center h-screen">
+    <main className="h-screen">
         <LandingPageNavbar />
         {children}
+        <Footer />
     </main>
   )
 }

@@ -1,13 +1,13 @@
-import { Button } from '@/components/ui/button'
 import React from 'react'
-import { ModeToggle } from '@/components/global/buttons/mode-toggle'
+import HeroSection from '@/modules/landing/components/hero-section'
+import BentoSection from '@/modules/landing/components/bento'
 type Props = {}
 
 const Page = (props: Props) => {
   return (
     <div className="">
-      <Button variant={"ghost"}>Click me</Button>
-      <ModeToggle />
+      <HeroSection />
+      <BentoSection />
     </div>
   )
 }

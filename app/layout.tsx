@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Lato } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import GlobalProvider from "@/providers/global";
+import Footer from "@/components/global/footer";
 
 const font = Lato({
   subsets: ["latin"],
@@ -25,7 +26,10 @@ export default function RootLayout({
         <body
           className={`${font.className} antialiased`}
         >
-          <GlobalProvider>{children}</GlobalProvider>
+          <GlobalProvider>
+            {children}
+            <Footer />
+          </GlobalProvider>
         </body>
       </html>
     </ClerkProvider>
