@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import React from "react";
 import { ThemeProvider } from "./theme-provider";
+import QueryClientProvider from "./query-client";
 
 type Props = {
   children: React.ReactNode;
@@ -14,7 +15,9 @@ const GlobalProvider = ({ children }: Props) => {
       enableSystem
       disableTransitionOnChange
     >
-      {children}
+      <QueryClientProvider>
+        {children}
+      </QueryClientProvider>
     </ThemeProvider>
   );
 };
