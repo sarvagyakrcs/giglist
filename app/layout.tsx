@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Lato } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import GlobalProvider from "@/providers/global";
 import { Toaster } from "react-hot-toast";
 
-const font = Lato({
+const font = Poppins({
   subsets: ["latin"],
   weight: ["400", "700"],
 });

@@ -32,20 +32,32 @@ const LandingPageNavbar = (props: Props) => {
       isScrolled ? "dark:bg-gray-900/60 backdrop-blur-md" : "bg-transparent"
     )}>
         <Logo className='opacity-80' />
-        <NavMenu className="" origin="desktop" />
+        <NavMenu className="ml-20" origin="desktop" />
         <div className="flex items-center justify-center gap-x-2">
           <ModeToggle />
           <div className="flex gap-2">
-            {isSignedIn ? <UserButton /> : <Link 
-              href="/sign-in"
-              className={cn("bg-background rounded-2xl flex gap-2", buttonVariants({
-                variant: "outline",
-                size: "sm"
-              }))}
-            >
-              <LogOut />
-              Login
-            </Link>}
+            {isSignedIn ? <UserButton /> : (
+              <>
+                <Link 
+                  href="/sign-in"
+                  className={cn(buttonVariants({
+                    variant: "ghost",
+                    size: "sm"
+                  }))}
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/sign-up"
+                  className={cn(buttonVariants({
+                    variant: "default",
+                    size: "sm"
+                  }))}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
             <GlassSheet className="flex items-center justify-center" triggerClass='lg:hidden'
               trigger={
                 <Button

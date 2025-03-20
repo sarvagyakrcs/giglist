@@ -14,12 +14,12 @@ const LoginForm = (props: Props) => {
     <form onSubmit={onAuthenticateUser} className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input {...register("email")} id="email" type="email" placeholder="Enter your email" />
+          <Input {...register("email")} id="email" type="email" />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="password">Password</Label>
-          <Input {...register("password")} id="password" type="password" placeholder="Enter your password" />
+          <Input {...register("password")} id="password" type="password" />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         </div>
         <Button disabled={isPending} type="submit" className="w-full">

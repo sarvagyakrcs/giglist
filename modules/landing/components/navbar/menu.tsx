@@ -17,7 +17,7 @@ const NavMenu = (props: Props) => {
   switch (props.origin) {
     case "desktop":
       return <Card className={cn(
-        "bg-clip-padding backdrop-blur-2xl backdrop-filter bg-transparent p-1 lg:flex hidden rounded-2xl",
+        "bg-transparent p-1 lg:flex hidden rounded-2xl",
         props.className
       )}>
         <CardContent className="p-0 flex gap-2">
@@ -33,7 +33,7 @@ const NavMenu = (props: Props) => {
               className={cn(
                 "rounded-xl flex gap-2 py-2 px-4 items-center",
                 section === item.path
-                  ? "bg-background/20 border"
+                  ? "text-primary"
                   : ""
               )}
             >
@@ -44,34 +44,31 @@ const NavMenu = (props: Props) => {
         </CardContent>
       </Card>
     
-      case "mobile":
-        return <Card
-        className={cn(
-          "bg-clip-padding backdrop-blur-2xl backdrop-filter bg-transparent p-1 flex lg:hidden rounded-2xl w-full",
-          props.className,
-        )}
-      >
-        <CardContent className="p-0 flex flex-col w-full gap-1">
-          {NAVBAR_CONSTANTS.map((item) => (
-            <Link
-              key={item.id}
+    case "mobile":
+      return (
+        <div className="flex flex-col gap-3 p-6 min-w-[250px]">
+          { NAVBAR_CONSTANTS.map((item) => (
+            <Link 
+              key={item.id} 
               href={item.path}
               {...(item.section && {
                 onClick: () => {
                   onSetSection(item.path)
-                },
+                }
               })}
               className={cn(
-                "rounded-xl flex gap-2 py-2 px-4 items-center w-full",
-                section === item.path ? "bg-background/20 border" : "",
+                "flex gap-3 py-2.5 px-4 items-center rounded-lg transition-colors",
+                section === item.path
+                  ? "bg-primary/10 text-primary dark:bg-primary/20"
+                  : "hover:bg-accent/50"
               )}
             >
-              <item.icon className="w-4 h-4" />
-              <span className="text-sm font-medium">{item.label}</span>
+              <item.icon className="w-5 h-5" />
+              <span className="text-sm font-medium">{ item.label }</span>
             </Link>
-          ))}
-        </CardContent>
-      </Card>
+          )) }
+        </div>
+      )
   
     default:
       return null;

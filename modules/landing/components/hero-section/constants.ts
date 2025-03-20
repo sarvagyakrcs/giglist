@@ -1,9 +1,9 @@
 export const HERO_CONSTANTS = {
     content: {
       whatsNew: "Discover Gigs",
-      version: "Now live: GigList Beta",
+      version: "Now live: Giglist Beta",
       title: "Find or offer services effortlessly",
-      description: "Connect with skilled professionals or post your own gigs. Whether you need a quick job done or want to monetize your expertise, GigList makes it easy.",
+      description: "Connect with skilled professionals or post your own gigs. Whether you need a quick job done or want to monetize your expertise, Giglist makes it easy.",
       cta: {
         primary: "Post a Gig",
         secondary: "Browse Gigs"
