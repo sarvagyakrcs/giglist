@@ -34,7 +34,7 @@ const LandingPageNavbar = (props: Props) => {
           <ModeToggle />
           <div className="flex gap-2">
             <Link 
-              href="/login"
+              href="/sign-in"
               className={cn("bg-background rounded-2xl flex gap-2", buttonVariants({
                 variant: "outline",
                 size: "sm"

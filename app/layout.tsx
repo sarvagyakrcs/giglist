@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Lato } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import GlobalProvider from "@/providers/global";
-import Footer from "@/components/global/footer";
+import { Toaster } from "react-hot-toast";
 
 const font = Lato({
   subsets: ["latin"],
@@ -28,6 +28,7 @@ export default function RootLayout({
         >
           <GlobalProvider>
             {children}
+            <Toaster />
           </GlobalProvider>
         </body>
       </html>
