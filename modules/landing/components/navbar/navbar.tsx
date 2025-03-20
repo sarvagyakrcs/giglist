@@ -29,7 +29,7 @@ const LandingPageNavbar = (props: Props) => {
   return (
     <nav className={cn(
       "w-full flex justify-between fixed top-0 left-0 right-0 items-center px-10 py-5 z-50 transition-all duration-300",
-      isScrolled ? "dark:bg-gray-900/60 backdrop-blur-md border-b" : "bg-transparent"
+      isScrolled ? "dark:bg-gray-900/60 backdrop-blur-md" : "bg-transparent"
     )}>
         <Logo className='opacity-80' />
         <NavMenu className="" origin="desktop" />
