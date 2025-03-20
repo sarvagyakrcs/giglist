@@ -9,8 +9,162 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id        String   @id @default(cuid())
+  firstname String
+  lastname  String
+  createdAt DateTime @default(now())
+
+  // Clerk
+  clerkId   String   @unique
+  image     String?
+
+  // Stripe
+  stripeId  String?
+
+  // Relationships
+  gigs      Gig[]
+  orders    Order[]
+  posts     Post[]
+  likes     Like[]
+  comments  Comment[]
+  sentMessages     Message[]  @relation("SentMessages")
+  receivedMessages Message[]  @relation("ReceivedMessages")
+  reviews   Review[]
+
+  @@index([clerkId, stripeId])
 }
-        
+
+model Gig {
+  id        String   @id @default(cuid())
+  name      String
+  description String
+  thumbnail String
+  gallery   String[]
+  jsonDescription String
+  htmlDescription String
+  icon String
+
+  visibility Gig_Visibility
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   String
+  domain    String
+  orders    Order[]
+  reviews   Review[]
+
+  @@index([ownerId])
+  @@index([domain])
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    OrderStatus
+
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  gig       Gig      @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  gigId     String
+
+  @@index([userId])
+  @@index([gigId])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  likes     Like[]
+  comments  Comment[]
+
+  @@index([authorId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+
+  @@unique([userId, postId])
+  @@index([userId])
+  @@index([postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+
+  @@index([authorId])
+  @@index([postId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId  String
+  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  gig       Gig      @relation(fields: [gigId], references: [id], onDelete: Cascade)
+  gigId     String
+
+  @@unique([userId, gigId])
+  @@index([userId])
+  @@index([gigId])
+}
+
+enum Gig_Visibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+
