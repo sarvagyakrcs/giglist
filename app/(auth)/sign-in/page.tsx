@@ -33,7 +33,7 @@ const SignInPage = () => {
         </Link>
       </p> */}
       <p className="text-center text-sm text-muted-foreground">
-        Forgot your password?
+        Forgot your password?{" "}
         <Link href="/forgot-password" className="text-primary hover:underline">
           Reset it
         </Link>

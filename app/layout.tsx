@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import GlobalProvider from "@/providers/global";
 import { Toaster } from "react-hot-toast";
+import { CommandK } from "@/components/global/search-box/command-k";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({
           <GlobalProvider>
             {children}
             <Toaster />
+            <CommandK />
           </GlobalProvider>
         </body>
       </html>

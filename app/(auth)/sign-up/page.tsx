@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import LoginForm from '@/modules/auth/sign-in/forms/login-form'
 import GoogleLogIn from '@/modules/auth/sign-in/forms/google-log-in'
+import SignUpForm from '@/modules/auth/sign-up/forms/sign-up-form'
 
 const SignInPage = () => {
   return (
@@ -13,7 +14,7 @@ const SignInPage = () => {
         </h5>
       </div>
 
-      <LoginForm />
+      <SignUpForm />
 
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
@@ -26,16 +27,10 @@ const SignInPage = () => {
         </div>
       </div>
       <GoogleLogIn />
-      {/* <p className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
-        <Link href="/sign-up" className="text-primary hover:underline">
-          Sign up
-        </Link>
-      </p> */}
       <p className="text-center text-sm text-muted-foreground">
-        Forgot your password?
-        <Link href="/forgot-password" className="text-primary hover:underline">
-          Reset it
+        Already have an account?{" "}
+        <Link href="/sign-in" className="text-primary hover:underline">
+          Sign in
         </Link>
       </p>
     </div>
