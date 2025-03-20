@@ -1,14 +1,22 @@
-import { ClerkProvider } from '@clerk/nextjs'
-import React from 'react'
+import { ClerkProvider } from "@clerk/nextjs";
+import React from "react";
+import { ThemeProvider } from "./theme-provider";
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const GlobalProvider = ({ children }: Props) => {
   return (
-    <div className=""></div>
-  )
-}
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {children}
+    </ThemeProvider>
+  );
+};
 
-export default GlobalProvider
+export default GlobalProvider;
