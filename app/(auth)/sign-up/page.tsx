@@ -8,12 +8,6 @@ import SignUpForm from '@/modules/auth/sign-up/forms/sign-up-form'
 const SignInPage = () => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h5 className='font-bold text-2xl text-center'>
-          Welcome back
-        </h5>
-      </div>
-
       <SignUpForm />
 
       <div className="relative">

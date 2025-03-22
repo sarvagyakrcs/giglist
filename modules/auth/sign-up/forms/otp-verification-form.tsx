@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, CheckCircle2 } from "lucide-react"
+import { AlertCircle, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface OTPVerificationFormProps {
@@ -16,6 +16,8 @@ interface OTPVerificationFormProps {
 
 export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: OTPVerificationFormProps) {
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""))
+  const [resendTimer, setResendTimer] = useState(30)
+  const [canResend, setCanResend] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   // Focus the first input when component mounts
@@ -24,6 +26,19 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
       inputRefs.current[0].focus()
     }
   }, [])
+
+  // Handle resend timer
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (resendTimer > 0 && !canResend) {
+      timer = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (resendTimer === 0) {
+      setCanResend(true);
+    }
+    return () => clearInterval(timer);
+  }, [resendTimer, canResend]);
 
   const handleChange = (element: HTMLInputElement, index: number) => {
     const value = element.value
@@ -87,17 +102,25 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
     onSubmit(otp.join(""))
   }
 
+  const handleResend = () => {
+    if (!canResend) return;
+    setResendTimer(30);
+    setCanResend(false);
+    // TODO: Implement resend logic
+  }
+
   return (
-    <Card className="w-full max-w-md mx-auto shadow-sm border border-border/60">
-      <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-xl font-medium">Verify Your Email</CardTitle>
-        <CardDescription>Enter the 6-digit verification code sent to your email</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6">
-          <Label htmlFor="otp-input-0" className="text-sm font-medium mb-2 block">
-            Verification Code
-          </Label>
+    <div className="w-full max-w-md mx-auto">
+      <div className="space-y-2 text-center mb-6">
+        <h2 className="text-2xl font-semibold tracking-tight">Verify Your Email</h2>
+        <p className="text-sm text-muted-foreground">
+          Enter the 6-digit verification code sent to your email
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex flex-col gap-2">
+          <Label className="text-sm font-medium">Verification Code</Label>
           <div className="flex justify-between gap-2">
             {otp.map((digit, index) => (
               <Input
@@ -115,7 +138,7 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onPaste={index === 0 ? handlePaste : undefined}
                 className={cn(
-                  "w-11 h-12 text-center text-base font-medium rounded-md transition-colors",
+                  "w-12 h-12 text-center text-base font-medium rounded-md transition-colors",
                   digit ? "border-primary/50 bg-primary/5" : "",
                 )}
                 aria-label={`Digit ${index + 1} of verification code`}
@@ -123,20 +146,28 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
             ))}
           </div>
           {error && (
-            <div className="flex items-center gap-2 mt-3 text-destructive">
+            <div className="flex items-center gap-2 text-destructive text-sm">
               <AlertCircle className="h-4 w-4" />
-              <p className="text-sm">{error}</p>
+              <p>{error}</p>
             </div>
           )}
         </div>
+
         <div className="text-sm text-center text-muted-foreground">
           Didn't receive a code?{" "}
-          <button type="button" className="text-primary font-medium hover:underline underline-offset-4 transition-colors">
-            Resend
+          <button
+            type="button"
+            onClick={handleResend}
+            disabled={!canResend}
+            className={cn(
+              "font-medium hover:underline underline-offset-4 transition-colors",
+              canResend ? "text-primary" : "text-muted-foreground cursor-not-allowed"
+            )}
+          >
+            {canResend ? "Resend" : `Resend in ${resendTimer}s`}
           </button>
         </div>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-3 pt-2 pb-6">
+
         <Button
           className="w-full"
           onClick={handleSubmit}
@@ -144,26 +175,15 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
         >
           {isSubmitting ? (
             <span className="flex items-center gap-2">
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
+              <Loader2 className="h-4 w-4 animate-spin" />
               Verifying
             </span>
           ) : (
             "Verify Code"
           )}
         </Button>
-        <p className="text-xs text-center text-muted-foreground px-6">
+
+        <p className="text-xs text-center text-muted-foreground">
           By verifying your identity, you agree to our{" "}
           <a href="#" className="text-primary hover:underline underline-offset-4">
             Terms of Service
@@ -173,8 +193,8 @@ export default function OTPVerificationForm({ onSubmit, isSubmitting, error }: O
             Privacy Policy
           </a>
         </p>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }
 

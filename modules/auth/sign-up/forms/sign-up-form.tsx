@@ -41,64 +41,85 @@ const SignUpForm = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
-      {verifying ? (
-        <OTPVerificationForm 
-          onSubmit={handleOTPSubmit}
-          isSubmitting={creating}
-          error={verificationError}
-        />
-      ) : (
-        <div className="space-y-3">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input 
-              id="email" 
-              type="email" 
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              {...register("password")}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            {passwordNotMatch && (
-              <p className="text-sm text-red-500">
-                Passwords do not match
-              </p>
-            )}
-          </div>
-          <div id="clerk-captcha" className="w-full" />
-          <Button 
-            disabled={buttonDisabled || creating} 
-            type="submit" 
-            className="w-full"
-          >
-            {creating ? <Loader2 size={30} className="animate-spin" /> : "Sign Up"}
-          </Button>
+    <div className="w-full max-w-md mx-auto">
+      {!verifying && (
+        <div className="space-y-2 text-center mb-6">
+          <h2 className="text-2xl font-semibold tracking-tight">Create an Account</h2>
+          <p className="text-sm text-muted-foreground">
+            Enter your details to get started
+          </p>
         </div>
       )}
-    </form>
+
+      <form onSubmit={handleFormSubmit} className="space-y-4">
+        {verifying ? (
+          <OTPVerificationForm 
+            onSubmit={handleOTPSubmit}
+            isSubmitting={creating}
+            error={verificationError}
+          />
+        ) : (
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                {...register("email")}
+                placeholder="Enter your email"
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Create a password"
+              />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+              />
+              {passwordNotMatch && (
+                <p className="text-sm text-red-500">
+                  Passwords do not match
+                </p>
+              )}
+            </div>
+            <div id="clerk-captcha" className="w-full" />
+            <Button 
+              disabled={buttonDisabled || creating} 
+              type="submit" 
+              className="w-full"
+            >
+              {creating ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Creating Account
+                </span>
+              ) : (
+                "Sign Up"
+              )}
+            </Button>
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 
