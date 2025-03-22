@@ -13,17 +13,13 @@ model User {
   firstname String?
   lastname  String?
   createdAt DateTime @default(now())
-  type UserType @default(BUYER)
+  type      UserType @default(BUYER)
 
   // Clerk
   clerkId   String   @unique
   image     String?
 
-  // Stripe
-  stripeId  String?
-
   // Relationships
-  gigs      Gig[]
   orders    Order[]
   posts     Post[]
   likes     Like[]
@@ -31,9 +27,27 @@ model User {
   sentMessages     Message[]  @relation("SentMessages")
   receivedMessages Message[]  @relation("ReceivedMessages")
   reviews   Review[]
+  seller    Seller?
+  ownedGigs Gig[]
 
-  @@index([clerkId, stripeId])
+  @@index([clerkId])
 }
+
+model Seller {
+  id        String  @id @default(cuid())
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @unique
+  createdAt DateTime @default(now())
+
+  // Additional seller-specific fields
+  rating    Float?  
+  bio       String?
+  gigs      Gig[]
+
+    // Stripe
+  stripeId  String?
+}
+
 
 enum UserType {
   BUYER
@@ -50,6 +64,8 @@ model Gig {
   jsonDescription String
   htmlDescription String
   icon String
+  serviceCategory ServiceCategory
+  price     Float
 
   visibility Gig_Visibility
   createdAt DateTime @default(now())
@@ -61,10 +77,30 @@ model Gig {
   domain    String
   orders    Order[]
   reviews   Review[]
+  seller    Seller?  @relation(fields: [sellerId], references: [id])
+  sellerId  String?
 
   @@index([ownerId])
   @@index([domain])
+  @@index([sellerId])
 }
+
+enum ServiceCategory {
+  HOME_SERVICES
+  OUTDOOR_LANDSCAPING
+  AUTO_SERVICES
+  BUSINESS_PROFESSIONAL
+  MOVING_DELIVERY_STORAGE
+  EVENT_SERVICES
+  SKILLED_TRADES_REPAIRS
+  PET_SERVICES
+  EDUCATION_TUTORING
+  HEALTH_BEAUTY_WELLNESS
+  CUSTOM_CREATIVE
+  MARKETING_DIGITAL
+  REMOTE_VIRTUAL
+}
+
 
 model Order {
   id        String   @id @default(cuid())

@@ -23,8 +23,13 @@ import { Circle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import GlassCard from "@/components/global/glass-card";
 import Logo from "@/components/global/logo";
+import { User } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
+import { InitialOnboardingAction } from "../actions/initial-onboarding-action";
+import { LoaderIcon } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export default function InitialOnboardingForm() {
+export default function InitialOnboardingForm({ user, redirectUrlAfterOnboarding }: { user: User, redirectUrlAfterOnboarding ?: string }) {
   const [selectedType, setSelectedType] = useState(userTypes[0]);
   const form = useForm<z.infer<typeof InitialOnboardingSchema>>({
     resolver: zodResolver(InitialOnboardingSchema),
@@ -32,16 +37,33 @@ export default function InitialOnboardingForm() {
       type: "BUYER",
       fName: "",
       lName: "",
+      clerkId: user.clerkId,
+    },
+  });
+  const router = useRouter();
+
+  const { isPending, mutate: Onboard } = useMutation({
+    mutationKey: ["initialOnboarding", user.id, user.clerkId],
+    mutationFn: InitialOnboardingAction,
+    onMutate: (formdata) => {
+      toast.loading(`Onboarding ${formdata.fName} as a ${formdata.type}`, {
+        id: "onboarding",
+      });
+    },
+    onError: (error) => {
+      toast.error("Something Went Wrong", { id: "onboarding" });
+    },
+    onSuccess: () => {
+      toast.success("Onboarding Successful", { id: "onboarding" });
+      router.push(redirectUrlAfterOnboarding ?? "/home");
     },
   });
 
   function onSubmit(values: z.infer<typeof InitialOnboardingSchema>) {
     try {
-      console.log("Form values:", values);
-      toast.success("Form submitted successfully!");
+      Onboard(values);
     } catch (error) {
       console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
     }
   }
 
@@ -52,7 +74,7 @@ export default function InitialOnboardingForm() {
           <div className="mt-4 ml-4">
             <Logo className="my-5" />
             <p className="mt-4 text-sm text-gray-500">
-                Please fill out the form below to get started
+              Please fill out the form below to get started
             </p>
           </div>
         </div>
@@ -71,7 +93,11 @@ export default function InitialOnboardingForm() {
                   <FormItem>
                     <FormLabel>Firstname</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your first name" {...field} />
+                      <Input
+                        disabled={isPending}
+                        placeholder="Enter your first name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormDescription>
                       This is your public display name.
@@ -90,7 +116,11 @@ export default function InitialOnboardingForm() {
                   <FormItem>
                     <FormLabel>Lastname</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your last name" {...field} />
+                      <Input
+                        disabled={isPending}
+                        placeholder="Enter your last name"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -117,6 +147,7 @@ export default function InitialOnboardingForm() {
                     >
                       {userTypes.map((type) => (
                         <Radio
+                          disabled={isPending}
                           key={type.id}
                           value={type}
                           aria-label={type.title}
@@ -160,8 +191,8 @@ export default function InitialOnboardingForm() {
               )}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Submit
+          <Button disabled={isPending} type="submit" className="w-full">
+            { isPending ? <LoaderIcon className="h-6 w-6 animate-spin" /> : "Onboard" }
           </Button>
         </form>
       </Form>

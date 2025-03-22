@@ -50,7 +50,7 @@ const UseAuth = () => {
                 reset();
                 await setActive({ session: authenticated.createdSessionId });
                 toast.success("Welcome back");
-                router.push("/");
+                router.push("/home");
             }
             
         } catch (error) {

@@ -9,7 +9,7 @@ export const onAuthenticatedUser = async () => {
         if (!clerk) {
             throw new Error("Unauthorized")
         }
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
                 clerkId: clerk.id
             }
