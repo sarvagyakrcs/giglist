@@ -13,6 +13,7 @@ model User {
   firstname String?
   lastname  String?
   createdAt DateTime @default(now())
+  type UserType @default(BUYER)
 
   // Clerk
   clerkId   String   @unique
@@ -32,6 +33,12 @@ model User {
   reviews   Review[]
 
   @@index([clerkId, stripeId])
+}
+
+enum UserType {
+  BUYER
+  SELLER
+  ADMIN
 }
 
 model Gig {
