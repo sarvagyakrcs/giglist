@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
-const UseAuthSignUp = () => {
+export const useAuthSignUp = () => {
   const {
     setActive,
     isLoaded,
@@ -18,6 +18,7 @@ const UseAuthSignUp = () => {
   const [creating, setCreating] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [code, setCode] = useState("");
+  const [verificationError, setVerificationError] = useState<string | undefined>(undefined);
 
   const {
     register,
@@ -39,8 +40,8 @@ const UseAuthSignUp = () => {
       }
 
       await signUp.create({
-        emailAddress: getValues("email"),
-        password: getValues("password"),
+        emailAddress: email,
+        password: password,
       });
 
       await signUp.prepareEmailAddressVerification({
@@ -48,34 +49,55 @@ const UseAuthSignUp = () => {
       });
 
       setVerifying(true);
-    } catch (error) {
+      toast.success("Verification code sent to your email");
+    } catch (error: any) {
       console.error(JSON.stringify(error, null, 2));
-      toast.error("Something went wrong");
+      if (error.errors?.[0]?.message) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
 
-  const onInitiateUserRegistration = handleSubmit(async (values) => {
-    if (!isLoaded) {
+  const onInitiateUserRegistration = async () => {
+    if (!isLoaded || !signUp) {
       toast.error("Something went wrong");
       return;
     }
+
+    if (!code) {
+      setVerificationError("Please enter the verification code");
+      return;
+    }
+
     try {
       setCreating(true);
+      setVerificationError(undefined);
+
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code
-      })
+      });
+
       if (completeSignUp.status !== "complete") {
-        return toast.error("Something went wrong");
+        setVerificationError("Invalid verification code");
+        return;
       }
 
       if (completeSignUp.status === "complete") {
-        if (!signUp.createdUserId) return
+        if (!signUp.createdUserId) {
+          toast.error("Something went wrong");
+          return;
+        }
+
         const user = await onSignUpUser({
           clerkId: signUp.createdUserId,
           image: ""
-        })
+        });
 
         reset();
+        setCode("");
+        setVerifying(false);
 
         if (user.status === 200) {
           toast.success("Account created successfully");
@@ -84,18 +106,18 @@ const UseAuthSignUp = () => {
           toast.error("Something went wrong");
           router.refresh();
         }
-
-        setCreating(false);
-        setVerifying(false);
       }
-
-      else {
-        console.error(JSON.stringify(completeSignUp, null, 2));
-      }
-    } catch (error) {
+    } catch (error: any) {
       console.error(JSON.stringify(error, null, 2));
+      if (error.errors?.[0]?.message) {
+        setVerificationError(error.errors[0].message);
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setCreating(false);
     }
-  })
+  }
 
   return {
     register,
@@ -106,6 +128,7 @@ const UseAuthSignUp = () => {
     creating,
     code,
     setCode,
-    getValues
+    getValues,
+    verificationError
   }
 }
