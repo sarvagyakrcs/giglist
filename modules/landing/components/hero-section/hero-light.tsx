@@ -27,11 +27,6 @@ export default function HeroLight() {
       </svg>
       <div className={`mx-auto max-w-${HERO_CONSTANTS.styling.container.maxWidth} px-${HERO_CONSTANTS.styling.container.padding.x} pt-${HERO_CONSTANTS.styling.container.padding.top} pb-${HERO_CONSTANTS.styling.container.padding.bottom.default} sm:pb-${HERO_CONSTANTS.styling.container.padding.bottom.sm} lg:flex lg:px-8 lg:py-40`}>
         <div className={`mx-auto max-w-${HERO_CONSTANTS.styling.content.maxWidth} lg:mx-0 lg:shrink-0 lg:pt-8`}>
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="h-11"
-          />
           <div className="mt-24 sm:mt-32 lg:mt-16">
             <Link href={HERO_CONSTANTS.links.whatsNew} className="inline-flex space-x-6">
               <span className="rounded-full bg-indigo-600/10 px-3 py-1 text-sm/6 font-semibold text-indigo-600 ring-1 ring-indigo-600/10 ring-inset">

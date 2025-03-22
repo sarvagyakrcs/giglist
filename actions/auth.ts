@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { currentUser } from "@clerk/nextjs/server"
+import { create } from "domain"
 
 export const onAuthenticatedUser = async () => {
     try {
@@ -21,5 +22,37 @@ export const onAuthenticatedUser = async () => {
     } catch (error) {
         console.error(error)
         throw new Error("Internal server error")
+    }
+}
+
+export const onSignUpUser = async (data : {
+    clerkId: string,
+    image: string
+}) => {
+    try {
+        const createdUser = await prisma.user.create({
+            data: {
+                clerkId: data.clerkId,
+            }
+        })
+
+        if(createdUser){
+            return {
+                status: 200,
+                message: "User created successfully",
+                id: createdUser.id
+            }
+        }
+
+        return {
+            status: 500,
+            message: "Something went wrong"
+        }
+    } catch (error) {
+        console.error(error)
+        return {
+            status: 500,
+            message: "Something went wrong"
+        }
     }
 }

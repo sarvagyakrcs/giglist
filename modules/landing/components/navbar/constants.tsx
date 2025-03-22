@@ -1,4 +1,4 @@
-import { CreditCard, HomeIcon, Phone } from "lucide-react"
+import { CreditCard, HomeIcon, Newspaper, Phone } from "lucide-react"
 import { LucideIcon } from "lucide-react"
 
 export const NAVBAR_CONSTANTS : {
@@ -17,8 +17,8 @@ export const NAVBAR_CONSTANTS : {
     },
     {
         id: 2,
-        label: "Changelog",
-        path: "/changelog",
+        label: "Contact",
+        path: "/contact",
         section: false,
         icon: CreditCard
     },
@@ -27,6 +27,6 @@ export const NAVBAR_CONSTANTS : {
         label: "About",
         path: "/about",
         section: false,
-        icon: Phone
+        icon: Newspaper
     }
 ]

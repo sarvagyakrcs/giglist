@@ -26,12 +26,12 @@ const SignInPage = () => {
         </div>
       </div>
       <GoogleLogIn />
-      {/* <p className="text-center text-sm text-muted-foreground">
+      <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <Link href="/sign-up" className="text-primary hover:underline">
           Sign up
         </Link>
-      </p> */}
+      </p>
       <p className="text-center text-sm text-muted-foreground">
         Forgot your password?{" "}
         <Link href="/forgot-password" className="text-primary hover:underline">
