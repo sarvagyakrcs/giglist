@@ -2,7 +2,6 @@
 
 import { prisma } from "@/lib/prisma"
 import { currentUser } from "@clerk/nextjs/server"
-import { create } from "domain"
 
 export const onAuthenticatedUser = async () => {
     try {

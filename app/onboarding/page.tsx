@@ -1,6 +1,6 @@
+"use server"
 import { onAuthenticatedUser } from '@/actions/auth';
 import InitialOnboardingForm from '@/modules/onboarding/forms/initial-onboarding-form';
-import { useUser } from '@clerk/nextjs';
 import React from 'react'
 
 const OnboardingPage = async () => {

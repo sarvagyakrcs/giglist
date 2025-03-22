@@ -100,6 +100,7 @@ export const useAuthSignUp = () => {
         setVerifying(false);
 
         if (user.status === 200) {
+          await setActive({ session: completeSignUp.createdSessionId });
           toast.success("Account created successfully");
           router.push("/onboarding");
         } else {
